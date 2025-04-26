@@ -1,7 +1,7 @@
-<!-- #[![mirror](https://img.shields.io/badge/mirror-github-blue)](https://github.com/neilg63/byte-shifter)
+#[![mirror](https://img.shields.io/badge/mirror-github-blue)](https://github.com/neilg63/byte-shifter)
 [![crates.io](https://img.shields.io/crates/v/byte-shifter.svg)](https://crates.io/crates/byte-shifter)
 [![docs.rs](https://docs.rs/byte-shifter/badge.svg)](https://docs.rs/byte-shifter)
- -->
+
 # ByteShifter: Fast Data Encryption
 
 ByteShifter is a Rust library that provides efficient functions for encrypting and decrypting byte streams using a cyclic byte-shifting algorithm. It works by applying a *mask* (an array of unsigned 8-bit integers) to shift bytes in a source array. The same mask can then be used to decrypt the data. This approach produces indecipherable binary blobs, making it suitable for encrypting files or streams.

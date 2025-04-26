@@ -2,6 +2,10 @@
 name = "byte_shifter"
 version = "0.1.0"
 edition = "2021"
+description = "This crates provides functions for encrypting and decrypting byte streams using a cyclic byte-shifting algorithm."
+repository = "https://github.com/neilg63/rotary-add"
+categories = ["mathematics", "cryptography"]
+license = "GPL-2.0-or-later WITH Bison-exception-2.2"
 
 [lib]
 name = "byte_shifter"
@@ -9,8 +13,7 @@ path = "src/lib.rs"
 
 [dependencies]
 hex = "0.4.3"
-rand = "0.9.1"
-rotary-add = "0.1.5"
+rand = "^0.9.1"
 uuid = { version = "1.16.0", features = ["v4","fast-rng","macro-diagnostics"] }
 
 

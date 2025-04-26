@@ -48,7 +48,6 @@ dependencies = [
  "criterion",
  "hex",
  "rand",
- "rotary-add",
  "uuid",
 ]
 
@@ -436,12 +435,6 @@ name = "regex-syntax"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
-
-[[package]]
-name = "rotary-add"
-version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62b7375a309c6e1cbe11ab6e2f2cf37b3ddd6da42f92ddf2d8804b737c2af6ec"
 
 [[package]]
 name = "rustversion"

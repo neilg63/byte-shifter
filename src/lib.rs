@@ -1,5 +1,3 @@
-use rotary_add::RotaryAdd;
-
 /// This function provides functions to generate random byte sequences
 /// that may serve as encryption keys 
 pub fn generate_code(size: u8) -> Vec<u8> {
@@ -25,22 +23,26 @@ pub fn from_hexdec_string(text: &str) -> Vec<u8> {
         .collect()
 }
 
+fn offset_bytes(source: &[u8], mask: &[u8], reverse: bool) -> Vec<u8> {
+  let mask_len = mask.len();
+  source.iter().enumerate().map(|(b_index, &b_val)| {
+      let mask_index = b_index % mask_len;
+      if reverse {
+          b_val.wrapping_sub(mask[mask_index])
+      } else {
+          b_val.wrapping_add(mask[mask_index])
+      }
+  }).collect()
+}
+
 /// This function shifts the bytes of a source array by a mask array
 pub fn shift_bytes(source: &[u8], mask: &[u8]) -> Vec<u8> {
-    let mask_len = mask.len();
-    source.iter().enumerate().map(|(b_index, &b_val)| {
-        let mask_index = b_index % mask_len;
-        b_val.rotary_add(&mask[mask_index])
-    }).collect()
+  offset_bytes(source, mask, false)
 }
 
 /// This function unshifts the bytes of a masked source array by a mask array
 pub fn unshift_bytes(source: &[u8], mask: &[u8]) -> Vec<u8> {
-    let mask_len = mask.len();
-    source.iter().enumerate().map(|(b_index, &b_val)| {
-        let mask_index = b_index % mask_len;
-        b_val.rotary_sub(&mask[mask_index])
-    }).collect()
+  offset_bytes(source, mask, true)
 }
 
 
