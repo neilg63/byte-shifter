@@ -119,4 +119,4 @@ byte-shifter = "0.1.0"
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+GPL-2.0-or-later WITH Bison-exception-2.2
