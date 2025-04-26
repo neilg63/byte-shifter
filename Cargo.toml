@@ -1,0 +1,22 @@
+[package]
+name = "byte_shifter"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "byte_shifter"
+path = "src/lib.rs"
+
+[dependencies]
+hex = "0.4.3"
+rand = "0.9.1"
+rotary-add = "0.1.5"
+uuid = { version = "1.16.0", features = ["v4","fast-rng","macro-diagnostics"] }
+
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[[bench]]
+name = "byte_shifter_bench"
+harness = false
