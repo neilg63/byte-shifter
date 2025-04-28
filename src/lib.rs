@@ -23,26 +23,44 @@ pub fn from_hexdec_string(text: &str) -> Vec<u8> {
         .collect()
 }
 
-fn offset_bytes(source: &[u8], mask: &[u8], reverse: bool) -> Vec<u8> {
+fn offset_bytes(source: &mut [u8], mask: &[u8], reverse: bool) {
   let mask_len = mask.len();
-  source.iter().enumerate().map(|(b_index, &b_val)| {
-      let mask_index = b_index % mask_len;
-      if reverse {
+  let power_of_2 = mask_len.is_power_of_two();
+  for (b_index, b_val) in source.iter_mut().enumerate() {
+      let mask_index = if power_of_2 {
+          b_index & (mask_len - 1) // Fast for mask_len = 256
+      } else {
+          b_index % mask_len // Correct for any mask_len (e.g., 5)
+      };
+      *b_val = if reverse {
           b_val.wrapping_sub(mask[mask_index])
       } else {
           b_val.wrapping_add(mask[mask_index])
-      }
-  }).collect()
+      };
+  }
 }
+
 
 /// This function shifts the bytes of a source array by a mask array
 pub fn shift_bytes(source: &[u8], mask: &[u8]) -> Vec<u8> {
-  offset_bytes(source, mask, false)
+  let mut output = source.to_vec();
+  offset_bytes(&mut output, mask, false);
+  output
 }
 
 /// This function unshifts the bytes of a masked source array by a mask array
 pub fn unshift_bytes(source: &[u8], mask: &[u8]) -> Vec<u8> {
-  offset_bytes(source, mask, true)
+  let mut output = source.to_vec();
+  offset_bytes(&mut output, mask, true);
+  output
+}
+
+pub fn shift_bytes_inplace(source: &mut [u8], mask: &[u8]) {
+  offset_bytes(source, mask, false);
+}
+
+pub fn unshift_bytes_inplace(source: &mut [u8], mask: &[u8]) {
+  offset_bytes(source, mask, true);
 }
 
 
@@ -76,6 +94,20 @@ mod tests {
     let masked_bytes = shift_bytes(&source, &mask);
     let shifted_str = masked_bytes.iter().map(|&b| b as char).collect::<String>();
     let expected_str = "2468:79;=5bdfhjg";
+    assert_eq!(shifted_str, expected_str);
+
+    assert_eq!(source, unshift_bytes(&masked_bytes, &mask));
+  }
+
+  #[test]
+  fn test_power_of_2_shift() {
+    let source_str = "1234567890abcdef";
+    let mask_str = "01a2b96b";
+    let source = source_str.as_bytes();
+    let mask = from_hexdec_string(mask_str);
+    let masked_bytes = shift_bytes(&source, &mask);
+    let shifted_str = masked_bytes.iter().map(|&b| b as char).collect::<String>();
+    let expected_str = "2Ôì\u{9f}6Øð£:Ò\u{1a}Íd\u{6}\u{1e}Ñ";
     assert_eq!(shifted_str, expected_str);
 
     assert_eq!(source, unshift_bytes(&masked_bytes, &mask));
